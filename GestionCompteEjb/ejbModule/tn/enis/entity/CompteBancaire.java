@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Table(name = "T_compte")
@@ -16,17 +18,21 @@ public class CompteBancaire implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long rib;
-	private String client;
 	private float solde;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_client")
+	private ClientBanque client;
 
-	public CompteBancaire(Long rib, String client, float solde) {
+
+	public CompteBancaire(Long rib, ClientBanque client, float solde) {
 		super();
 		this.rib = rib;
 		this.client = client;
 		this.solde = solde;
 	}
 
-	public CompteBancaire(String client, float solde) {
+	public CompteBancaire(ClientBanque client, float solde) {
 		super();
 		this.client = client;
 		this.solde = solde;
@@ -74,11 +80,11 @@ public class CompteBancaire implements Serializable {
 		this.rib = rib;
 	}
 
-	public String getClient() {
+	public ClientBanque getClient() {
 		return client;
 	}
 
-	public void setClient(String client) {
+	public void setClient(ClientBanque client) {
 		this.client = client;
 	}
 
@@ -88,5 +94,10 @@ public class CompteBancaire implements Serializable {
 
 	public void setSolde(float solde) {
 		this.solde = solde;
+	}
+	
+	@Override
+	public String toString() {
+		return "CompteBancaire [rib=" + rib + ", solde=" + solde + ", client=" + client + "]";
 	}
 }
