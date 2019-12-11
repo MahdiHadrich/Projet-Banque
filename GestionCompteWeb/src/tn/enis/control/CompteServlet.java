@@ -1,10 +1,6 @@
 package tn.enis.control;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.List;
 
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
@@ -14,82 +10,81 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import tn.enis.dao.CompteDao;
+import tn.enis.entity.ClientBanque;
 import tn.enis.entity.CompteBancaire;
-import tn.enis.service.CompteService;
+import tn.enis.service.ClientBanqueServiceLocal;
+import tn.enis.service.CompteBancaireServiceLocal;
 
-/**
- * Servlet implementation class CompteServlet
- */
+
+
 @WebServlet("/CompteServlet")
 public class CompteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	private CompteService compteService;
+	private CompteBancaireServiceLocal serviceCompte;
 
+	@EJB
+	private ClientBanqueServiceLocal serviceClient;
+
+	
 	public CompteServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		if (request.getParameter("add") != null) {
+		if ("add".equals(request.getParameter("action"))) {
+			Long cin = Long.valueOf(request.getParameter("cin"));
+			float solde = Float.parseFloat(request.getParameter("solde"));
+
+			serviceCompte.save(solde, cin);
+
+		} else if ("delete".equals(request.getParameter("action"))) {
+			Long rib = Long.valueOf(request.getParameter("rib"));
+			serviceCompte.delete(rib);
+
+			return;
+
+		} else if ("edit".equals(request.getParameter("action"))) {
+			Long rib = Long.valueOf(request.getParameter("rib"));
+			CompteBancaire compte = serviceCompte.getById(rib);
+			request.setAttribute("compte", compte);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("edit.jsp");
+			dispatcher.forward(request, response);
+			return;
+		} else if ("update".equals(request.getParameter("action"))) {
+			Long rib = Long.valueOf(request.getParameter("rib"));
 			String client = request.getParameter("client");
 			float solde = Float.parseFloat(request.getParameter("solde"));
-			CompteBancaire compte = new CompteBancaire(client, solde);
-			compteService.save(compte);
-			
-			// response.getWriter().append("<h1>Ajout effectu� avec succ�s</h1>");
-		}
-		else if(request.getParameter("delete") != null) {
-			Long rib=Long.valueOf(request.getParameter("rib"));
-			compteService.delete(rib);
-		}
-		else if(request.getParameter("edit") != null) {
-			Long rib =Long.valueOf(request.getParameter("rib"));
-			CompteBancaire compte= compteService.getById(rib);
-			request.setAttribute("compte", compte);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("edit-compte.jsp");
-			dispatcher.forward(request, response);
-			return ;
-			
-		}
-		else if(request.getParameter("update") != null) {
-			Long rib =Long.valueOf(request.getParameter("rib"));
-			String client= request.getParameter("client");
-			float solde= Float.parseFloat(request.getParameter("solde"));
-			CompteBancaire compte=new CompteBancaire(rib,client,solde);
-			compteService.update(compte);
-			
+
+			CompteBancaire compte = new CompteBancaire(null, solde);
+			compte.setRib(rib);
+
+			serviceCompte.update(compte);
+
 		}
 
-		List<CompteBancaire> comptes = compteService.getAll();
-		request.setAttribute("comptes", comptes);
+		request.setAttribute("comptes", serviceCompte.getAll());
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("comptes.jsp");
 		dispatcher.forward(request, response);
 
 	}
 
-	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		
-			doGet(request, response);
-			}
-		
+		doGet(request, response);
 	}
+
+}
+
 
 
