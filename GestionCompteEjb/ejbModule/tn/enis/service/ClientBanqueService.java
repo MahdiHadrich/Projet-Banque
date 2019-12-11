@@ -1,7 +1,6 @@
 package tn.enis.service;
 
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 

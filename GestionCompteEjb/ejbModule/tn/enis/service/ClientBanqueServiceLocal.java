@@ -18,5 +18,6 @@ public interface ClientBanqueServiceLocal {
 
 	List<ClientBanque> getAll();
 
+	
 	String clientAutoComplete();
 }

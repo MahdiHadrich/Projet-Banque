@@ -64,6 +64,7 @@ public class ClientServlet extends HttpServlet {
 			clientService.update(client);
 
 		} else if ("getClientDto".equals(request.getParameter("action"))) {
+			
 			String clientDto = clientService.clientAutoComplete();
 			response.getWriter().println(clientDto);
 			return;

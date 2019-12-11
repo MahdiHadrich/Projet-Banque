@@ -74,16 +74,14 @@
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/popper.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-
 	<script src="js/sweetalert.min.js"></script>
-
 	<script src="js/jquery-ui.min.js"></script>
-
 	<script src="js/comptes.js"></script>
 
 	<script>
 	 var availableClients;
 	$( document ).ready(function() {
+		 
 		 getAllDtos();
 	
 		 function getAllDtos(){
@@ -104,7 +102,6 @@
 		    		}
 		    	});
 		    }
-		 
 			    $( "#client" ).autocomplete({
 			      source: availableClients,
 			      select: function (event, ui) {
