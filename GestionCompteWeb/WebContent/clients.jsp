@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
     <%@page import="tn.enis.entity.ClientBanque"%>
 <%@page import="java.util.List"%>
+
 <!DOCTYPE html>
 <html>
 <head>

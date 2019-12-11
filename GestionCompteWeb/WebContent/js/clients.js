@@ -1,3 +1,4 @@
+
 function deleteClient(cin) {
 	
 	swal({
